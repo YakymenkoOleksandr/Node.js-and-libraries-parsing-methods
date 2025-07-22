@@ -1,6 +1,13 @@
 import { startServer } from "../src/server.js";
+import { initMongoDB } from "./db/initMongoDB.js";
 
-startServer();
+
+const startAllSystem = async () => {
+    await initMongoDB();    // Додаємо асинхронне підключення бази данних
+    startServer();          // Запускаємо сервер
+};
+
+startAllSystem();
 
 
 
