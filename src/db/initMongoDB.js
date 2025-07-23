@@ -11,7 +11,7 @@ export const initMongoDB = async () => {
         /*Реалізація асинхронної функції для підключення серверу до бази данних. Важливу роль в mongoose відіграє метод connect 
         в який ми передаємо помилання з нашого MongoDB Atlas. Для того щоб підключення відбувалося, функцію потрібно викликати в
         index.js  */
-    console.log('Mongo connection successfully established!'); // Повідомлення про вдале підключення
+    console.log('Комната Монго з барахлом открита!'); // Повідомлення про вдале підключення
   } catch (e) {
     console.log('Error while setting up mongo connection', e); // Повідомлення про невдале підключення
     throw e;
