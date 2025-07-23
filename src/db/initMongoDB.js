@@ -7,7 +7,7 @@ export const initMongoDB = async () => {
         const url = getEnvVar('MONGODB_URL');
         const db = getEnvVar('MONGODB_DB');
 
-        await mongoose.connect(`mongodb+srv://${user}:${pwd}@${url}/${db}?retryWrites=true&w=majority&appName=Cluster0`); 
+        await mongoose.connect(`mongodb+srv://${user}:${pwd}@${url}/${db}?retryWrites=true&w=majority`); 
         /*Реалізація асинхронної функції для підключення серверу до бази данних. Важливу роль в mongoose відіграє метод connect 
         в який ми передаємо помилання з нашого MongoDB Atlas. Для того щоб підключення відбувалося, функцію потрібно викликати в
         index.js  */
