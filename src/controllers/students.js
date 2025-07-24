@@ -1,4 +1,4 @@
-import { getAllStudents, getStudentById } from '../services/students.js'; // Імпортуємо сервісні функції для взаємодії з базами данних
+import { createStudent, getAllStudents, getStudentById } from '../services/students.js'; // Імпортуємо сервісні функції для взаємодії з базами данних
 import createHttpError from 'http-errors'; // Спеціальна бібліотека для створення повідомлень помилок
 /*Контролери це функції, які використовуються в роутах та мідлварах на місці колбеку.
 Взаємодіють з БД за допомогою сервісів та містьть іншу програмну логіку.*/
@@ -47,6 +47,17 @@ export const getStudentByIdController = async (req, res, next) => {
   res.json({
     status: 200,
     message: `Successfully found student with id ${studentId}!`,
+    data: student,
+  });
+};
+
+
+export const createStudentController = async (req, res) => {  // Асинхронна функція
+  const student = await createStudent(req.body);              // Викликаємо сервісну функцію створення та передаємо туди данні записуючи результат в змінну
+  
+  res.json({
+    status: 201,
+    message: `Студента успішно створено.`,
     data: student,
   });
 };

@@ -3,6 +3,7 @@ import {
   // Імпортуємо контролери для заміни колбеків та структуризації коду.
   getStudentsController,
   getStudentByIdController,
+  createStudentController,
 } from '../controllers/students.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js'; // Імпортуємо try/catch обгортку
 
@@ -19,6 +20,8 @@ router.get('/students', ctrlWrapper(getStudentsController));
 //14.1 app заміняється на router.
 //14.2 Другий аргумент, а саме колбек є і називається контролером. І замінюється на контролер.
 router.get('/students/:studentId', ctrlWrapper(getStudentByIdController));
+
+router.post('/students', ctrlWrapper(createStudentController));
 
 /*Тут ти імпортуєш router, який був експортований як default, але називаєш його studentsRouter, бо він містить маршрути,
 пов’язані зі студентами. // А чому тоді імпортується як studentsRouter? Тому що при експорті за замовчуванням 
