@@ -6,7 +6,7 @@ export const getAllStudents = async () => {         // Асинхронна фу
   return students;                                  // ПОверає всі наявні документи, якщо є
 };
 
-export const getStudentById = async (studentId) => {
-    const student = await StudentsCollection.findById(studentId);
-    return student;
+export const getStudentById = async (studentId) => {              // Асинхронна функція
+    const student = await StudentsCollection.findById(studentId); // Пошук в колекції та запис в змінну
+    return student;                                               // Пвернення результату
 };
