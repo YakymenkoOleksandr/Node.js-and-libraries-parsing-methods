@@ -3,7 +3,7 @@ import { HttpError } from 'http-errors'; // Бібліотека для обро
 
 export const errorHendler = (err, req, res, next) => {  // Функція, що обробляє помилки на сервері
 
-    if (err instanceof HttpError) {                     // Перевіряє, чи є помилка екземпляром HttpError (створеної через createHttpError).
+    if (err instanceof HttpError) {                     // Перевіряє, чи є помилка екземпляром HttpError (створеної через createHttpError). instanceof – це оператор JavaScript, який перевіряє, чи належить об'єкт до певного класу (або його прототипного ланцюжка). object instanceof Class
         res.status(err.status).json({                   // Якщо так, вона відправляє JSON-відповідь з:
             status: err.status,                         // status – HTTP-статус помилки (наприклад, 404).
             message: err.name,                          // message – назва помилки (наприклад, "Not Found").
