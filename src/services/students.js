@@ -2,6 +2,16 @@ import { StudentsCollection } from '../db/models/student.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 /*Сервіси потрібні для взаємодії з БД за допомогою mongoose*/
 
+/*Асинхронні функції (async) і базові методи Mongoose (як find()) завжди потребують await,
+інакше замість даних ти отримаєш "обіцянку" (проміс), яку ще треба виконати. */
+
+export const getAllDocumentsStudents = async () => {
+  const studentsAll = await StudentsCollection.find();
+  return {
+    data: studentsAll
+  };
+};
+
 
 export const getAllStudents = async ({ page, perPage }) => {         // 1. Асинхронна функція 2. Приймає аргументи пагінації 
   const limit = perPage;                                             // Запис в змінну кількості документів на сторінку

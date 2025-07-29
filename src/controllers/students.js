@@ -1,8 +1,19 @@
-import { createStudent, getAllStudents, getStudentById, deleteStudent, upsertStudent, updateStudent } from '../services/students.js'; // Імпортуємо сервісні функції для взаємодії з базами данних
+import { createStudent, getAllStudents, getStudentById, deleteStudent, upsertStudent, updateStudent, getAllDocumentsStudents } from '../services/students.js'; // Імпортуємо сервісні функції для взаємодії з базами данних
 import createHttpError from 'http-errors'; // Спеціальна бібліотека для створення повідомлень помилок
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 /*Контролери це функції, які використовуються в роутах та мідлварах на місці колбеку.
 Взаємодіють з БД за допомогою сервісів та містьть іншу програмну логіку.*/
+
+export const getStudentsControllerWithoutPagination = async (req, res) => {
+
+  const studentsAll = await getAllDocumentsStudents();
+
+  res.json({                                                     
+    status: 200,
+    message: 'Successfully found students!',
+    data: studentsAll,
+  });
+};
 
 export const getStudentsController = async (req, res) => { // Контролер для отримання всіх документів студентів
   const { page, perPage } = parsePaginationParams(req.query);    // Отримання та перевірка параметрів page та perPage

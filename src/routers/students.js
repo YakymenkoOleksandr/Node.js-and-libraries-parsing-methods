@@ -7,6 +7,7 @@ import {
   deleteStudentController,
   upsertStudentController,
   patchStudentController,
+  getStudentsControllerWithoutPagination,
 } from '../controllers/students.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js'; // Імпортуємо try/catch обгортку
 import { validateBody } from '../middlewares/validateBody.js'; //Мідлвара для валідації
@@ -17,6 +18,9 @@ import { isValidId } from '../middlewares/isValidId.js'; // Валідатор �
 /*Для організації роутингу виділяється папка з файлами де за допомогою методу Router бібліотеки express будуються роути.
 В router передається метод Router(). Замість app. тепер використовуємо router.*/
 const router = Router(); // studentsRouter — це екземпляр роутера Express, створений за допомогою функції Router() з пакету express.
+
+/*Реалізація отримання всіх документів студентів без пагінації.*/
+router.get('/studentsAll', ctrlWrapper(getStudentsControllerWithoutPagination));
 
 //13. Після створення 1. Схеми (new Schema) => 2. Моделі (model("name", nameSchema)) => 3. Сервісу (asycn func + mongoose mathods ) => 4. Створення роуту.
 //13.1 app заміняється на router.
