@@ -1,19 +1,22 @@
 import { createStudent, getAllStudents, getStudentById, deleteStudent, upsertStudent, updateStudent } from '../services/students.js'; // Імпортуємо сервісні функції для взаємодії з базами данних
 import createHttpError from 'http-errors'; // Спеціальна бібліотека для створення повідомлень помилок
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 /*Контролери це функції, які використовуються в роутах та мідлварах на місці колбеку.
 Взаємодіють з БД за допомогою сервісів та містьть іншу програмну логіку.*/
 
-export const getStudentsController = async (req, res, next) => {
-  try {
-    const students = await getAllStudents();
-    res.json({
-      status: 200,
-      message: 'Successfully found students!',
-      data: students,
-    });
-  } catch (err) {
-    next(err);
-  }
+export const getStudentsController = async (req, res) => { // Контролер для отримання всіх документів студентів
+  const { page, perPage } = parsePaginationParams(req.query);    // Отримання та перевірка параметрів page та perPage
+
+  const students = await getAllStudents({                        // Виконання сервісної функції для отримання всіх студентів з передачею в неї аргументів page та perPage 
+    page,
+    perPage,
+  });
+  
+  res.json({                                                     // Відповідь від сервера про успішне виконання запиту
+    status: 200,
+    message: 'Successfully found students!',
+    data: students,
+  });
 };
 
 export const getStudentByIdController = async (req, res, next) => {

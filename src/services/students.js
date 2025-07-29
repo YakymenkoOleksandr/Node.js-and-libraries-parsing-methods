@@ -1,9 +1,34 @@
 import { StudentsCollection } from '../db/models/student.js';
+import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 /*Сервіси потрібні для взаємодії з БД за допомогою mongoose*/
 
-export const getAllStudents = async () => {         // Асинхронна функція 
-  const students = await StudentsCollection.find(); // Асинхронний запит методом .find() на пошук всіх документів
-  return students;                                  // Поверає всі наявні документи, якщо є
+
+export const getAllStudents = async ({ page, perPage }) => {         // 1. Асинхронна функція 2. Приймає аргументи пагінації 
+  const limit = perPage;                                             // Запис в змінну кількості документів на сторінку
+  const skip = (page - 1) * perPage;                                 // Кількість документів, яку потрібно пропустити
+
+  const studentsQuery = StudentsCollection.find();                  // Синхронний запит методом .find() на пошук всіх документів. Добуває колекцію студентів
+  
+  /*
+  .merge(studentsQuery) Що робить: Об'єднує поточний запит з іншим запитом (studentsQuery) 
+  .countDocuments() Що робить: Виконує запит і повертає кількість документів, що відповідають умовам
+  */
+  const studentsCount = await StudentsCollection.find()                   
+    .merge(studentsQuery)                                           
+    .countDocuments();                                              
+  
+  /*.skip(skip) Призначення: Пропускає певну кількість документів у результаті.
+    .limit(limit) Призначення: Обмежує кількість документів у відповіді.
+    .exec() Призначення: Виконує запит і повертає Promise.
+  */
+  const students = await studentsQuery.skip(skip).limit(limit).exec(); // Асинхронний запит методом .find() на пошук всіх документів
+
+  const paginationData = calculatePaginationData(studentsCount, perPage, page);
+
+  return {
+    data: students,
+    ...paginationData,
+  };                                                   // Поверає всі наявні документи, якщо є
 };
 
 export const getStudentById = async (studentId) => {              // Асинхронна функція. studentID це id створений БД для документа
