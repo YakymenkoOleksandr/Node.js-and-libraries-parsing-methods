@@ -1,6 +1,8 @@
 import { createStudent, getAllStudents, getStudentById, deleteStudent, upsertStudent, updateStudent, getAllDocumentsStudents } from '../services/students.js'; // Імпортуємо сервісні функції для взаємодії з базами данних
 import createHttpError from 'http-errors'; // Спеціальна бібліотека для створення повідомлень помилок
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
 /*Контролери це функції, які використовуються в роутах та мідлварах на місці колбеку.
 Взаємодіють з БД за допомогою сервісів та містьть іншу програмну логіку.*/
 
@@ -16,11 +18,16 @@ export const getStudentsControllerWithoutPagination = async (req, res) => {
 };
 
 export const getStudentsController = async (req, res) => { // Контролер для отримання всіх документів студентів
-  const { page, perPage } = parsePaginationParams(req.query);    // Отримання та перевірка параметрів page та perPage
+  const { page, perPage } = parsePaginationParams(req.query);    // Отримання та перевірка параметрів пагінації page та perPage
+  const { sortOrder, sortBy } = parseSortParams(req.query);      // Отримання та перевірка параметрів сортування sortOrder та sortBy
+  const filter = parseFilterParams(req.query);
 
   const students = await getAllStudents({                        // Виконання сервісної функції для отримання всіх студентів з передачею в неї аргументів page та perPage 
     page,
     perPage,
+    sortOrder,
+    sortBy,
+    filter,
   });
   
   res.json({                                                     // Відповідь від сервера про успішне виконання запиту

@@ -13,25 +13,48 @@ export const getAllDocumentsStudents = async () => {
 };
 
 
-export const getAllStudents = async ({ page, perPage }) => {         // 1. Асинхронна функція 2. Приймає аргументи пагінації 
+export const getAllStudents = async ({ page, perPage, sortOrder, sortBy, filter}) => {         // 1. Асинхронна функція 2. Приймає аргументи пагінації 
   const limit = perPage;                                             // Запис в змінну кількості документів на сторінку
   const skip = (page - 1) * perPage;                                 // Кількість документів, яку потрібно пропустити
 
   const studentsQuery = StudentsCollection.find();                  // Синхронний запит методом .find() на пошук всіх документів. Добуває колекцію студентів
   
-  /*
-  .merge(studentsQuery) Що робить: Об'єднує поточний запит з іншим запитом (studentsQuery) 
-  .countDocuments() Що робить: Виконує запит і повертає кількість документів, що відповідають умовам
-  */
+  if (filter.gender) {                               
+    studentsQuery.where('gender').equals(filter.gender);
+  }
+  if (filter.maxAge) {
+    studentsQuery.where('age').lte(filter.maxAge);
+  }
+  if (filter.minAge) {
+    studentsQuery.where('age').gte(filter.minAge);
+  }
+  if (filter.maxAvgMark) {
+    studentsQuery.where('avgMark').lte(filter.maxAvgMark);
+  }
+  if (filter.minAvgMark) {
+    studentsQuery.where('avgMark').gte(filter.minAvgMark);
+  }
+
+  /* .merge(studentsQuery) Що робить: Об'єднує поточний запит з іншим запитом (studentsQuery)
+  .countDocuments() Що робить: Виконує запит і повертає кількість документів, що відповідають умовам */
+  
+  /* Данний код замінюється коли додаються фільта
   const studentsCount = await StudentsCollection.find()                   
     .merge(studentsQuery)                                           
     .countDocuments();                                              
+  */
   
   /*.skip(skip) Призначення: Пропускає певну кількість документів у результаті.
     .limit(limit) Призначення: Обмежує кількість документів у відповіді.
-    .exec() Призначення: Виконує запит і повертає Promise.
+    .exec() Призначення: Виконує запит і повертає Promise. */
+  
+  /* Данний код замінюється коли додаються фільта
+  const students = await studentsQuery.skip(skip).limit(limit).sort({[sortBy]: sortOrder}).exec(); // Асинхронний запит методом .find() на пошук всіх документів
   */
-  const students = await studentsQuery.skip(skip).limit(limit).exec(); // Асинхронний запит методом .find() на пошук всіх документів
+  
+  const [studentsCount, students] = await Promise.all([
+    StudentsCollection.find().merge(studentsQuery).countDocuments(), studentsQuery.skip(skip).limit(limit).sort({ [sortBy]: sortOrder }).exec(),
+  ]);
 
   const paginationData = calculatePaginationData(studentsCount, perPage, page);
 
