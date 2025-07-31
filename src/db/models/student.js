@@ -24,6 +24,10 @@ const studentsSchema = new Schema( // Створюємо нову схему
       required: true,
       default: false,
     },
+    parentId: { // Цей об’єкт у схемі Mongoose визначає поле parentId як посилання (reference) на документ із колекції users. 
+      type: Schema.Types.ObjectId, 
+      ref: 'users' // Визначає, що parentId посилається на документ із колекції users. Це дозволяє Mongoose автоматично популювати (populate) поле, отримуючи повний документ користувача замість просто ObjectId.
+    },  
   },
   {
     timestamps: true, // timestamps — встановлює значення true, щоб автоматично створювати поля createdAt та updatedAt, які вказують на час створення та оновлення документа.
