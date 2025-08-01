@@ -9,6 +9,7 @@ import { getEnvVar } from '../src/utils/getEnvVar.js'; // Функція пер�
 import { errorHendler } from './middlewares/errorHandler.js';
 import { notFoundHendler } from './middlewares/notFoundHandler.js';
 import router from './routers/index.js'; // Батьківський роут файл для students і auth роут файлів
+import cookieParser from 'cookie-parser'; // Бібліотека для роботи з кукі
 
 
 // 2. Задамо порт на якому будемо працювати.
@@ -24,6 +25,9 @@ export const startServer = () => {
   app.use(express.json()); // Це вбудована мідлвара Express, яка: Автоматично парсить JSON-тіло (body) HTTP-запитів і робить його доступним у req.body.
   //6. Встановлюємо правила CROSS
   app.use(cors()); // Це мідлвара для встановлення політики CROS
+
+  //14. Додаємо кукі парсер.
+  app.use(cookieParser());
   //7. Додаємо логер та форматувач.
   app.use(
     pino({
